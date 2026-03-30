@@ -1,18 +1,24 @@
 #include <Arduino.h>
+#include "../lib/Configuration.h"
+#include "../lib/Blinker.h"
 
-// put function declarations here:
-int myFunction(int, int);
+using namespace Hardware;
+
+Blinker blinker(timer);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(baudrate);
+  Serial.println("Initialized");
+
+  pinMode(SENS, INPUT);
+  DDRB |= (1 << 4);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  if (blinker.update(micros())) {
+    PORTB ^= (1 << 4);
+  }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  uint8_t lightRead = digitalRead(SENS) ? 0 : 1;
+  Serial.println(lightRead);
 }
