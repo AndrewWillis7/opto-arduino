@@ -2,6 +2,25 @@
 #include "../lib/Configuration.h"
 #include "../lib/Blinker.h"
 
+
+// need to build the linker-driven project files
+// Something like this:
+
+/*
+project/
+├── platformio.ini
+├── src/
+│   ├── common/
+│   │   ├── shared.cpp
+│   │   └── shared.h
+│   ├── mcu_a/
+│   │   └── main.cpp
+│   └── mcu_b/
+│       └── main.cpp
+└── lib/
+*/
+
+
 using namespace Hardware;
 
 Blinker blinker(timer);
