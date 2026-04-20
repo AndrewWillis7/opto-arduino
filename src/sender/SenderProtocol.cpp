@@ -1,5 +1,5 @@
 #include "SenderProtocol.h"
-#include "../src/shared/Protocol.h"
+#include "../shared/protocol.h"
 
 SenderProtocol::SenderProtocol() {}
 
