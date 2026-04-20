@@ -1,18 +1,19 @@
 #pragma once
 #include <Arduino.h>
-#include "./NibbleReader.h"
-#include "./LCDView.h"
+#include "../lib/NibbleReader.h"
+#include "../lib/CharReciever.h"
+#include "../lib/LCDView.h"
 
 class App {
 public:
     App();
-
     void begin();
     void update();
 
 private:
     NibbleReader reader_;
-    LCDView view_;
+    CharReceiver receiver_;
+    LcdView view_;
 
     unsigned long lastRefreshMs_;
     static constexpr unsigned long refreshPeriodMs_ = 50;

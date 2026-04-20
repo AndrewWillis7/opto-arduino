@@ -1,37 +1,37 @@
 #pragma once
 #include <Arduino.h>
 
+struct PortBSnapshot {
+    uint8_t nibble;         // PB0..PB3
+    bool checkpoint;        // PB4
+    bool nibbleChanged;
+    bool checkpointRising;
+    uint32_t eventCount;
+};
+
 class NibbleReader {
 public:
     NibbleReader();
 
-    void begin(bool usePullups = false, bool invertLogic = false);
+    void begin(bool usePullups = false, bool invertNibble = false, bool invertCheckpoint = false);
+    PortBSnapshot getSnapshot();
 
-    bool hasChanged();
-    uint8_t getLatestNibble() const;
-    uint32_t getChangeCount() const;
-
-    // Called by the ISR Wrapper
     void handleInterrupt();
+    static void onPortBInterrupt();
+
 private:
-    static NibbleReader* instance;
+    static NibbleReader* instance_;
     static void bindInstance(NibbleReader* inst);
 
     volatile uint8_t latestNibble_;
-    volatile uint8_t previousNibble_;
+    volatile bool checkpoint_;
     volatile bool nibbleChanged_;
-    volatile uint32_t changeCount_;
+    volatile bool checkpointRising_;
+    volatile uint32_t eventCount_;
 
-    // stability filter
-    volatile uint8_t stableNibble_;
-    volatile uint8_t stableCandidate_;
-    volatile uint8_t stableCount_;
+    bool invertNibble_;
+    bool invertCheckpoint_;
 
-    bool invertLogic_;
-
-    uint8_t readRawNibble() const;
-
-public:
-    // ISR Bridge
-    static void onPortBInterrrupt();
+    uint8_t readNibbleRaw() const;
+    bool readCheckpointRaw() const;
 };
