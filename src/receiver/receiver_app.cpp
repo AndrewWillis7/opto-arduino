@@ -13,9 +13,6 @@ App::App()
 void App::begin() {
     Serial.begin(9600);
 
-    pinMode(LED_GREEN, OUTPUT);
-    digitalWrite(LED_GREEN, LOW);
-
     reader_.begin(false, true, true);
 
     // Timeout is slightly shorter than the gap between repeated message bursts.
@@ -26,6 +23,7 @@ void App::begin() {
 
     if (buzzer_.begin()) {
         Serial.println("Buzzer DAC ready");
+        buzzer_.beep(1000, 100);
     } else {
         Serial.println("Buzzer DAC NOT found");
     }
@@ -62,6 +60,8 @@ void App::update() {
 
         if (charSnap.latestChar == '#') {
             buzzer_.beep(2200, 120);
+        } else {
+            buzzer_.beep(0, 0);
         }
 
         // Helpful debug line if you want to inspect weird bytes:

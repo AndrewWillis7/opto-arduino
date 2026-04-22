@@ -8,6 +8,6 @@ void SenderApp::begin() {
 }
 
 void SenderApp::update() {
-    protocol_.sendString("Zach is Cool??>");
+    protocol_.sendString("Test Test #");
     delay(1000);
 }
