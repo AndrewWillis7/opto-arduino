@@ -10,29 +10,23 @@ CharReceiver::CharReceiver()
       completedCount_(0) {}
 
 void CharReceiver::update(const PortBSnapshot& portSnap) {
-    // First, capture nibble changes
-    if (portSnap.nibbleChanged) {
+    if (portSnap.checkpointRising) {
+        uint8_t nibble = portSnap.nibble & 0x0F;
+
         if (nibbleCount_ == 0) {
-            firstNibble_ = portSnap.nibble & 0x0F;
+            firstNibble_ = nibble;
             nibbleCount_ = 1;
-        } else if (nibbleCount_ == 1) {
-            secondNibble_ = portSnap.nibble & 0x0F;
-            nibbleCount_ = 2;
         } else {
-            // Ignore extras once we already have a full byte candidate
-            // until checkpoint commits it.
+            secondNibble_ = nibble;
+            nibbleCount_ = 2;
+
+            assembledByte_ = ((firstNibble_ & 0x0F) << 4) | (secondNibble_ & 0x0F);
+            latestChar_ = static_cast<char>(assembledByte_);
+            byteReady_ = true;
+            completedCount_++;
+
+            nibbleCount_ = 0;
         }
-    }
-
-    // Then, commit only if a full byte is ready
-    if (portSnap.checkpointRising && nibbleCount_ == 2) {
-        assembledByte_ = ((firstNibble_ & 0x0F) << 4) | (secondNibble_ & 0x0F);
-        latestChar_ = static_cast<char>(assembledByte_);
-        byteReady_ = true;
-        completedCount_++;
-
-        // Reset for next character
-        nibbleCount_ = 0;
     }
 }
 

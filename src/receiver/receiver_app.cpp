@@ -15,7 +15,7 @@ void App::begin() {
     pinMode(LED_GREEN, OUTPUT);
     digitalWrite(LED_GREEN, LOW);
 
-    reader_.begin(false, false, false);
+    reader_.begin(false, true, true);
     view_.begin();
 
     Serial.println("Receiver Ready");
@@ -24,28 +24,21 @@ void App::begin() {
 void App::update() {
     PortBSnapshot portSnap = reader_.getSnapshot();
 
-    if (portSnap.nibbleChanged || portSnap.checkpointRising) {
+    if (portSnap.checkpointRising) {
         receiver_.update(portSnap);
     }
 
     CharSnapshot charSnap = receiver_.getSnapshot();
 
-    /*
-    CHARACTER SUCCESS
-    */
     if (charSnap.byteReady) {
-
-        // Blink green LED
         digitalWrite(LED_GREEN, HIGH);
         delay(40);
         digitalWrite(LED_GREEN, LOW);
 
-        // Print received char to console
         Serial.print(charSnap.latestChar);
     }
 
     unsigned long now = millis();
-
     if ((now - lastRefreshMs_) >= refreshPeriodMs_ ||
         portSnap.nibbleChanged ||
         portSnap.checkpointRising ||

@@ -23,6 +23,7 @@ Need nibble result:
 bit3 bit2 bit1 bit0
 */
 
+/*
 uint8_t NibbleReader::readNibbleRaw() const {
     uint8_t raw = PINB;
 
@@ -31,6 +32,17 @@ uint8_t NibbleReader::readNibbleRaw() const {
         ((raw >> 2) & 0x02) |   // PB3 -> bit1
         ((raw >> 2) & 0x04) |   // PB4 -> bit2
         ((raw >> 2) & 0x08);    // PB5 -> bit3
+
+    if (invertNibble_) {
+        nibble = (~nibble) & 0x0F;
+    }
+
+    return nibble;
+}
+*/
+
+uint8_t NibbleReader::readNibbleRaw() const {
+    uint8_t nibble = (PINB >> 2) & 0x0F;   // PB2..PB5 -> bits 0..3
 
     if (invertNibble_) {
         nibble = (~nibble) & 0x0F;

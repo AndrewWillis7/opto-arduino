@@ -23,13 +23,10 @@ void SenderProtocol::writeNibble(uint8_t nibble) {
 }
 
 void SenderProtocol::pulseCheckpoint() {
-    // IMPORTANT:
-    // Keep the current nibble stable while pulsing checkpoint.
-    // Do NOT zero data lines here, or the receiver may interpret
-    // that transition as a new nibble.
     PORTB |= CHECK_MASK;
     delay(Protocol::PULSE_WIDTH_MS);
     PORTB &= ~CHECK_MASK;
+    delay(Protocol::POST_PULSE_DELAY_MS);
 }
 
 void SenderProtocol::sendChar(char c) {
@@ -40,14 +37,11 @@ void SenderProtocol::sendChar(char c) {
 
     writeNibble(hi);
     delay(Protocol::NIBBLE_DELAY_MS);
+    pulseCheckpoint();
 
     writeNibble(lo);
     delay(Protocol::NIBBLE_DELAY_MS);
-
     pulseCheckpoint();
-
-    // Optional cleanup delay so next byte starts from a clean state
-    delay(Protocol::POST_CHAR_DELAY_MS);
 }
 
 void SenderProtocol::sendString(const char* str) {
