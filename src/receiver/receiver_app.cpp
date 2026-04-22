@@ -1,9 +1,12 @@
-#include "../lib/reciever_app.h"
+#include "../lib/receiver_app.h"
+#include "../lib/Configuration.h"
+
+using namespace Hardware;
 
 App::App()
     : reader_(),
       receiver_(),
-      view_(2, 3, 4, 5, 6, 7),
+      view_(LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7),
       lastRefreshMs_(0) {}
 
 void App::begin() {

@@ -1,23 +1,21 @@
 #pragma once
+#include <Arduino.h>
 
 namespace Hardware {
-    // Generic Configuration
-    #define baudrate 9600
+    constexpr unsigned long baudrate = 9600;
 
-    // Single Pin Definitions
-    #define LED 12
-    #define SENS 13
+    // Receiver input pins (PORTB on Uno)
+    constexpr uint8_t RX_BIT0 = 8;   // PB0
+    constexpr uint8_t RX_BIT1 = 9;   // PB1
+    constexpr uint8_t RX_BIT2 = 10;  // PB2
+    constexpr uint8_t RX_BIT3 = 11;  // PB3
+    constexpr uint8_t RX_CHECK = 12; // PB4
 
-    // Input
-    #define timer 10000
-
-    // Light Reader Pins
-    #define L1 8;
-    #define L2 9;
-    #define L3 10;
-    #define L4 11;
-
-    // LCD Wiring
-    // RS, E, D4, D5, D6, D7
-    int lcd_pins[6] = {2, 3, 4, 5, 6, 7};
-} // EON
+    // LCD wiring: RS, E, D4, D5, D6, D7
+    constexpr uint8_t LCD_RS = 2;
+    constexpr uint8_t LCD_E  = 3;
+    constexpr uint8_t LCD_D4 = 4;
+    constexpr uint8_t LCD_D5 = 5;
+    constexpr uint8_t LCD_D6 = 6;
+    constexpr uint8_t LCD_D7 = 7;
+}

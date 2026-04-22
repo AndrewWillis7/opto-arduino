@@ -4,7 +4,7 @@
 SenderProtocol::SenderProtocol() {}
 
 void SenderProtocol::begin() {
-    // PB1..PB5 outputs
+    // PB0..PB4 outputs
     DDRB |= OWNED_MASK;
     clearOwnedPins();
 }
@@ -16,24 +16,19 @@ void SenderProtocol::clearOwnedPins() {
 void SenderProtocol::writeNibble(uint8_t nibble) {
     nibble &= 0x0F;
 
-    // Map nibble bits into PB1..PB4
-    // nibble bit0 -> PB1
-    // nibble bit1 -> PB2
-    // nibble bit2 -> PB3
-    // nibble bit3 -> PB4
-    uint8_t portBits = (nibble << 1) & DATA_MASK;
-
+    // Map nibble directly into PB0..PB3
     uint8_t preserved = PORTB & ~OWNED_MASK;
-    PORTB = preserved | portBits; // checkpoint remains low here
+    PORTB = preserved | nibble;
 }
 
 void SenderProtocol::pulseCheckpoint() {
-    // Keep data lines low during pulse for a clean delimiter
-    uint8_t preserved = PORTB & ~OWNED_MASK;
-    PORTB = preserved | CHECK_MASK;
+    // IMPORTANT:
+    // Keep the current nibble stable while pulsing checkpoint.
+    // Do NOT zero data lines here, or the receiver may interpret
+    // that transition as a new nibble.
+    PORTB |= CHECK_MASK;
     delay(Protocol::PULSE_WIDTH_MS);
-
-    clearOwnedPins();
+    PORTB &= ~CHECK_MASK;
 }
 
 void SenderProtocol::sendChar(char c) {
@@ -49,6 +44,9 @@ void SenderProtocol::sendChar(char c) {
     delay(Protocol::NIBBLE_DELAY_MS);
 
     pulseCheckpoint();
+
+    // Optional cleanup delay so next byte starts from a clean state
+    delay(Protocol::POST_CHAR_DELAY_MS);
 }
 
 void SenderProtocol::sendString(const char* str) {

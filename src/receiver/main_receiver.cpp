@@ -1,5 +1,5 @@
 #include "../lib/Configuration.h"
-#include "../lib/reciever_app.h"
+#include "../lib/receiver_app.h"
 
 using namespace Hardware;
 

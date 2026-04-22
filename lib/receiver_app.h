@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include "../lib/NibbleReader.h"
-#include "../lib/CharReciever.h"
+#include "../lib/CharReceiver.h"
 #include "../lib/LCDView.h"
 
 class App {

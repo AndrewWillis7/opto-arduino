@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <LiquidCrystal.h>
-#include "../lib/CharReciever.h"
+#include "../lib/CharReceiver.h"
 
 class LcdView {
 public:

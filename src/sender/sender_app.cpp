@@ -8,12 +8,6 @@ void SenderApp::begin() {
 }
 
 void SenderApp::update() {
-    if (!sentOnce_) {
-        protocol_.sendString("Hello World!");
-        sentOnce_ = true;
-    }
-
-    delay(1000);
-
     protocol_.sendString("Hello World!");
+    delay(1000);
 }
