@@ -9,16 +9,20 @@ struct CharSnapshot {
     char latestChar;
     uint32_t completedCount;
     uint8_t nibbleCount;
+    bool resynced;
 };
 
 class CharReceiver {
 public:
     CharReceiver();
 
+    void begin(unsigned long nibbleTimeoutMs = 1200);
     void update(const PortBSnapshot& portSnap);
     CharSnapshot getSnapshot();
 
 private:
+    void resetAssemblyState();
+
     uint8_t firstNibble_;
     uint8_t secondNibble_;
     uint8_t nibbleCount_;
@@ -27,4 +31,8 @@ private:
     bool byteReady_;
     char latestChar_;
     uint32_t completedCount_;
+
+    unsigned long lastCheckpointMs_;
+    unsigned long nibbleTimeoutMs_;
+    bool resynced_;
 };

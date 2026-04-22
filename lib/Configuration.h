@@ -5,12 +5,12 @@ namespace Hardware {
     constexpr unsigned long baudrate = 9600;
 
     // Receiver input pins (PORTB on Uno)
-    constexpr uint8_t RX_BIT0 = 8;   // PB0
-    constexpr uint8_t RX_BIT1 = 9;   // PB1
-    constexpr uint8_t RX_BIT2 = 10;  // PB2
-    constexpr uint8_t RX_BIT3 = 11;  // PB3
-    constexpr uint8_t RX_CHECK = 12; // PB4
-    constexpr uint8_t LED_GREEN = 8;
+    constexpr uint8_t RX_BIT0 = 10;   // PB0
+    constexpr uint8_t RX_BIT1 = 11;   // PB1
+    constexpr uint8_t RX_BIT2 = 12;  // PB2
+    constexpr uint8_t RX_BIT3 = 13;  // PB3
+    constexpr uint8_t RX_CHECK = 9; // PB4
+    constexpr uint8_t LED_GREEN = 9;
 
     // LCD wiring: RS, E, D4, D5, D6, D7
     constexpr uint8_t LCD_RS = 2;
