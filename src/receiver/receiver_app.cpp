@@ -58,10 +58,12 @@ void App::update() {
 
         Serial.print(charSnap.latestChar);
 
-        if (charSnap.latestChar == '#') {
+        if (charSnap.latestChar == '^') {
             buzzer_.beep(2200, 120);
-        } else {
-            buzzer_.beep(0, 0);
+        } else if (charSnap.latestChar == '#') {
+            buzzer_.beep(1100, 120);
+        } else if (charSnap.latestChar == '_') {
+            buzzer_.beep(550, 120);
         }
 
         // Helpful debug line if you want to inspect weird bytes:
