@@ -2,8 +2,8 @@
 #include <Arduino.h>
 
 struct PortBSnapshot {
-    uint8_t nibble;         // PB0..PB3
-    bool checkpoint;        // PB4
+    uint8_t nibble;
+    bool checkpoint;
     bool nibbleChanged;
     bool checkpointRising;
     uint32_t eventCount;
@@ -13,7 +13,10 @@ class NibbleReader {
 public:
     NibbleReader();
 
-    void begin(bool usePullups = false, bool invertNibble = false, bool invertCheckpoint = false);
+    void begin(bool usePullups = false,
+               bool invertNibble = false,
+               bool invertCheckpoint = false);
+
     PortBSnapshot getSnapshot();
 
     void handleInterrupt();

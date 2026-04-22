@@ -10,9 +10,10 @@ public:
     void sendString(const char* str);
 
 private:
-    static constexpr uint8_t DATA_MASK  = 0b00001111; // PB0..PB3 = D8..D11
-    static constexpr uint8_t CHECK_MASK = 0b00010000; // PB4 = D12
-    static constexpr uint8_t OWNED_MASK = DATA_MASK | CHECK_MASK;
+    static constexpr uint8_t DATA_MASK  = 0b00111100; // PB0..PB3 = D8..D11 // OGS: 00001111
+    static constexpr uint8_t CHECK_MASK = 0b00000010; // PB4 = D12 // OGS: 00010000
+    static constexpr uint8_t OWNED_MASK = 0b00111110;
+    //static constexpr uint8_t OWNED_MASK = DATA_MASK | CHECK_MASK;
 
     void writeNibble(uint8_t nibble);
     void pulseCheckpoint();

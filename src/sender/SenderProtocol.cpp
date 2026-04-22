@@ -16,9 +16,10 @@ void SenderProtocol::clearOwnedPins() {
 void SenderProtocol::writeNibble(uint8_t nibble) {
     nibble &= 0x0F;
 
-    // Map nibble directly into PB0..PB3
+    uint8_t portBits = (nibble << 2) & DATA_MASK;
+
     uint8_t preserved = PORTB & ~OWNED_MASK;
-    PORTB = preserved | nibble;
+    PORTB = preserved | portBits;
 }
 
 void SenderProtocol::pulseCheckpoint() {

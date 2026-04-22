@@ -15,31 +15,52 @@ void NibbleReader::bindInstance(NibbleReader* inst) {
     instance_ = inst;
 }
 
+/*
+PB5 PB4 PB3 PB2
+13  12  11  10
+
+Need nibble result:
+bit3 bit2 bit1 bit0
+*/
+
 uint8_t NibbleReader::readNibbleRaw() const {
-    uint8_t nibble = PINB & 0x0F;     // D8-D11
+    uint8_t raw = PINB;
+
+    uint8_t nibble =
+        ((raw >> 2) & 0x01) |   // PB2 -> bit0
+        ((raw >> 2) & 0x02) |   // PB3 -> bit1
+        ((raw >> 2) & 0x04) |   // PB4 -> bit2
+        ((raw >> 2) & 0x08);    // PB5 -> bit3
+
     if (invertNibble_) {
         nibble = (~nibble) & 0x0F;
     }
+
     return nibble;
 }
 
 bool NibbleReader::readCheckpointRaw() const {
-    bool cp = (PINB & (1 << PB4)) != 0;   // D12
+    bool cp = (PINB & (1 << PB1)) != 0;   // D9
+
     if (invertCheckpoint_) {
         cp = !cp;
     }
+
     return cp;
 }
 
-void NibbleReader::begin(bool usePullups, bool invertNibble, bool invertCheckpoint) {
+void NibbleReader::begin(bool usePullups,
+                         bool invertNibble,
+                         bool invertCheckpoint) {
+
     invertNibble_ = invertNibble;
     invertCheckpoint_ = invertCheckpoint;
 
-    pinMode(8,  usePullups ? INPUT_PULLUP : INPUT);
-    pinMode(9,  usePullups ? INPUT_PULLUP : INPUT);
     pinMode(10, usePullups ? INPUT_PULLUP : INPUT);
     pinMode(11, usePullups ? INPUT_PULLUP : INPUT);
     pinMode(12, usePullups ? INPUT_PULLUP : INPUT);
+    pinMode(13, usePullups ? INPUT_PULLUP : INPUT);
+    pinMode(9,  usePullups ? INPUT_PULLUP : INPUT);
 
     noInterrupts();
 
@@ -53,12 +74,12 @@ void NibbleReader::begin(bool usePullups, bool invertNibble, bool invertCheckpoi
 
     PCICR |= (1 << PCIE0);
 
-    // PB0..PB4 = D8..D12
-    PCMSK0 |= (1 << PCINT0);
+    // PB1..PB5 = D9..D13
     PCMSK0 |= (1 << PCINT1);
     PCMSK0 |= (1 << PCINT2);
     PCMSK0 |= (1 << PCINT3);
     PCMSK0 |= (1 << PCINT4);
+    PCMSK0 |= (1 << PCINT5);
 
     interrupts();
 }
@@ -83,6 +104,7 @@ void NibbleReader::handleInterrupt() {
 
 PortBSnapshot NibbleReader::getSnapshot() {
     noInterrupts();
+
     PortBSnapshot snap;
     snap.nibble = latestNibble_;
     snap.checkpoint = checkpoint_;
@@ -92,8 +114,8 @@ PortBSnapshot NibbleReader::getSnapshot() {
 
     nibbleChanged_ = false;
     checkpointRising_ = false;
-    interrupts();
 
+    interrupts();
     return snap;
 }
 

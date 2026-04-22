@@ -10,8 +10,15 @@ App::App()
       lastRefreshMs_(0) {}
 
 void App::begin() {
+    Serial.begin(9600);
+
+    pinMode(LED_GREEN, OUTPUT);
+    digitalWrite(LED_GREEN, LOW);
+
     reader_.begin(false, false, false);
     view_.begin();
+
+    Serial.println("Receiver Ready");
 }
 
 void App::update() {
@@ -23,7 +30,22 @@ void App::update() {
 
     CharSnapshot charSnap = receiver_.getSnapshot();
 
+    /*
+    CHARACTER SUCCESS
+    */
+    if (charSnap.byteReady) {
+
+        // Blink green LED
+        digitalWrite(LED_GREEN, HIGH);
+        delay(40);
+        digitalWrite(LED_GREEN, LOW);
+
+        // Print received char to console
+        Serial.print(charSnap.latestChar);
+    }
+
     unsigned long now = millis();
+
     if ((now - lastRefreshMs_) >= refreshPeriodMs_ ||
         portSnap.nibbleChanged ||
         portSnap.checkpointRising ||

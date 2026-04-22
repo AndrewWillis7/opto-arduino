@@ -10,6 +10,7 @@ namespace Hardware {
     constexpr uint8_t RX_BIT2 = 10;  // PB2
     constexpr uint8_t RX_BIT3 = 11;  // PB3
     constexpr uint8_t RX_CHECK = 12; // PB4
+    constexpr uint8_t LED_GREEN = 8;
 
     // LCD wiring: RS, E, D4, D5, D6, D7
     constexpr uint8_t LCD_RS = 2;
