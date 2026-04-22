@@ -20,9 +20,15 @@ void App::begin() {
 
     // Timeout is slightly shorter than the gap between repeated message bursts.
     // Sender timing per nibble is huge right now, so 1200 ms is safe.
-    receiver_.begin(50);
+    receiver_.begin(1000);
 
     view_.begin();
+
+    if (buzzer_.begin()) {
+        Serial.println("Buzzer DAC ready");
+    } else {
+        Serial.println("Buzzer DAC NOT found");
+    }
 
     // Clean start for watchdog
     wdt_disable();
@@ -53,6 +59,10 @@ void App::update() {
         //digitalWrite(LED_GREEN, LOW);
 
         Serial.print(charSnap.latestChar);
+
+        if (charSnap.latestChar == '#') {
+            buzzer_.beep(2200, 120);
+        }
 
         // Helpful debug line if you want to inspect weird bytes:
         Serial.print("  [0x");

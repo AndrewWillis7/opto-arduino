@@ -13,10 +13,10 @@ namespace Hardware {
     constexpr uint8_t LED_GREEN = 9;
 
     // LCD wiring: RS, E, D4, D5, D6, D7
-    constexpr uint8_t LCD_RS = 2;
-    constexpr uint8_t LCD_E  = 3;
-    constexpr uint8_t LCD_D4 = 4;
+    constexpr uint8_t LCD_RS = 1;
+    constexpr uint8_t LCD_E  = 0;
+    constexpr uint8_t LCD_D4 = 6;
     constexpr uint8_t LCD_D5 = 5;
-    constexpr uint8_t LCD_D6 = 6;
-    constexpr uint8_t LCD_D7 = 7;
+    constexpr uint8_t LCD_D6 = 4;
+    constexpr uint8_t LCD_D7 = 3;
 }
