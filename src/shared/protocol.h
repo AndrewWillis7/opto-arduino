@@ -2,9 +2,9 @@
 #include <Arduino.h>
 
 namespace Protocol {
-    constexpr uint16_t NIBBLE_DELAY_MS   = 500;
-    constexpr uint16_t PULSE_WIDTH_MS    = 500;
-    constexpr uint16_t POST_PULSE_DELAY_MS = 150;
+    constexpr uint16_t NIBBLE_DELAY_MS   = 2;
+    constexpr uint16_t PULSE_WIDTH_MS    = 2;
+    constexpr uint16_t POST_PULSE_DELAY_MS = 1;
 
     struct FramePins {
         uint8_t bit0;

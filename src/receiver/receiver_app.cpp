@@ -20,7 +20,7 @@ void App::begin() {
 
     // Timeout is slightly shorter than the gap between repeated message bursts.
     // Sender timing per nibble is huge right now, so 1200 ms is safe.
-    receiver_.begin(1200);
+    receiver_.begin(50);
 
     view_.begin();
 
@@ -48,9 +48,9 @@ void App::update() {
     }
 
     if (charSnap.byteReady) {
-        digitalWrite(LED_GREEN, HIGH);
-        delay(40);
-        digitalWrite(LED_GREEN, LOW);
+        //digitalWrite(LED_GREEN, HIGH);
+        //delay(40);
+        //digitalWrite(LED_GREEN, LOW);
 
         Serial.print(charSnap.latestChar);
 
